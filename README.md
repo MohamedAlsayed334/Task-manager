@@ -28,6 +28,19 @@ A comprehensive Java-based Task Manager application with both Console and Graphi
 
 ---
 # 📁 File Structure
+<pre>
+task-manager-java/
+├── src/                    # Source code
+│   ├── console/           
+│   │   ├── App_Runner.java    # Console version main class
+│   │   └── list_methods.java  # Console version logic
+│   └── UI/                
+│       ├── AppRunner.java     # GUI version entry point
+│       └── ToDoApp.java       # GUI implementation
+├── .gitignore              # Git ignore rules
+├── README.md               # This file
+└── tasks.txt               # Auto-generated task storage (created after first run)
+</pre>
 
 
 ## 📦 Requirements
@@ -113,22 +126,6 @@ cd Task-manager
 javac src/UI/*.java
 java -cp src UI.AppRunner
 ```
---- 
-# Project Structure
-
-<pre>
-task-manager-java/
-├── src/                    # Source code
-│   ├── console/           
-│   │   ├── App_Runner.java    # Console version main class
-│   │   └── list_methods.java  # Console version logic
-│   └── UI/                
-│       ├── AppRunner.java     # GUI version entry point
-│       └── ToDoApp.java       # GUI implementation
-├── .gitignore              # Git ignore rules
-├── README.md               # This file
-└── tasks.txt               # Auto-generated task storage (created after first run)
-</pre>
 ---
 # 👨‍💻 Author
 
