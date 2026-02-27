@@ -246,6 +246,7 @@ public class ToDoApp
             if (task.get(1).equals(input) || task.get(0).equals(input)) {
                 taskList.remove(task);
                 saveTasks();
+                refreshDisplay();
                 JOptionPane.showMessageDialog(this, "Task Removed!");
                 return;
             }
@@ -271,7 +272,7 @@ public class ToDoApp
 
     public void saveTasks() {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("tasks.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("tasks2.txt"));
             for (List<String> task : taskList) {
                 writer.write(String.join(",", task) + "\n");
             }
@@ -283,11 +284,11 @@ public class ToDoApp
 
     public void loadTasks() {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader("tasks.txt"));
+            BufferedReader reader = new BufferedReader(new FileReader("tasks2.txt"));
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
-                List temp = new ArrayList<>();
+                List<String> temp = new ArrayList<>();
                 temp.add(data[0]);
                 temp.add(data[1]);
                 temp.add(data[2]);
