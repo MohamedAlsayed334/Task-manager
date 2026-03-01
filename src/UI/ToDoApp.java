@@ -28,7 +28,6 @@ public class ToDoApp
 
     ToDoApp() {
         start_ui();
-        loadTasks();
 
     }
 
@@ -134,6 +133,8 @@ public class ToDoApp
         frame.add(bottom, BorderLayout.SOUTH);
         frame.setVisible(true);
 
+        loadTasks();
+
     }
 
     public int make_unique_id() {
@@ -206,6 +207,7 @@ public class ToDoApp
         temp.add(taskPriority); // 2
         temp.add(String.valueOf(taskDays)); // 3
         temp.add(String.valueOf(creation_date)); // 4
+        temp.add("Active");
         taskList.add(temp);
         tableModel.addRow(new String[] { task_id, taskName, taskPriority,
                 calculateDetailedRemainingTime(creation_date, taskDays) });
@@ -223,7 +225,7 @@ public class ToDoApp
         input = input.trim();
         for (List<String> task : taskList) {
             if (task.get(1).equals(input) || task.get(0).equals(input)) {
-                task.set(4, "Finished");
+                task.set(5, "Finished");
                 saveTasks();
                 JOptionPane.showMessageDialog(this, "Task finished!");
                 refreshDisplay();
@@ -242,16 +244,23 @@ public class ToDoApp
         if (input == null || input.strip().isEmpty())
             return;
         input = input.strip();
+
+        List<String> taskToRemove = null;
         for (List<String> task : taskList) {
             if (task.get(1).equals(input) || task.get(0).equals(input)) {
-                taskList.remove(task);
-                saveTasks();
-                refreshDisplay();
-                JOptionPane.showMessageDialog(this, "Task Removed!");
-                return;
+                taskToRemove = task;
+                break;
             }
         }
-        JOptionPane.showMessageDialog(this, "Task not found!");
+
+        if (taskToRemove != null) {
+            taskList.remove(taskToRemove);
+            saveTasks();
+            refreshDisplay();
+            JOptionPane.showMessageDialog(this, "Task Removed!");
+        } else {
+            JOptionPane.showMessageDialog(this, "Task not found!");
+        }
     }
 
     public void removeAllTasks() {
@@ -289,17 +298,20 @@ public class ToDoApp
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
                 List<String> temp = new ArrayList<>();
-                temp.add(data[0]);
-                temp.add(data[1]);
-                temp.add(data[2]);
-                temp.add(data[3]);
-                temp.add(data[4]);
+                temp.add(data[0]); // ID
+                temp.add(data[1]); // Name
+                temp.add(data[2]); // Priority
+                temp.add(data[3]); // Days
+                temp.add(data[4]); // Creation date
+                if (data.length > 5) {
+                    temp.add(data[5]);
+                } else {
+                    temp.add("Active");
+                }
                 taskList.add(temp);
-
             }
             refreshDisplay();
             reader.close();
-
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -310,10 +322,22 @@ public class ToDoApp
             tableModel.removeRow(i);
         }
         for (List<String> task : taskList) {
-            tableModel.addRow(new String[] { task.get(0), task.get(1), task.get(2),
-                    calculateDetailedRemainingTime(LocalDateTime.parse(task.get(4)), Integer.parseInt(task.get(3))) });
-        }
+            String status;
+            if (task.size() > 5 && task.get(5).equals("Finished")) {
+                status = "Finished";
+            } else {
+                status = calculateDetailedRemainingTime(
+                        LocalDateTime.parse(task.get(4)),
+                        Integer.parseInt(task.get(3)));
+            }
 
+            tableModel.addRow(new String[] {
+                    task.get(0),
+                    task.get(1),
+                    task.get(2),
+                    status
+            });
+        }
     }
 
 }
